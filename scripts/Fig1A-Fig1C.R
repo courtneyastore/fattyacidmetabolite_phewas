@@ -15,9 +15,9 @@ circos.par("track.height" = 0.4)
 options(ggrepel.max.overlaps = Inf)
 
 
-o3fa_df <- as.data.frame(fread("/Users/courtneyastore/Dropbox (GaTech)/metabolitexenvironment_disease_project/tables/ST7_suggestive_O3FA.tsv"))
-o6fa_df <- as.data.frame(fread("/Users/courtneyastore/Dropbox (GaTech)/metabolitexenvironment_disease_project/tables/ST8_suggestive_O6FA.tsv"))
-dha_df <- as.data.frame(fread("/Users/courtneyastore/Dropbox (GaTech)/metabolitexenvironment_disease_project/tables/ST9_suggestive_DHA.tsv"))
+o3fa_df <- as.data.frame(fread("/Users/courtneyastore/Dropbox (GaTech)/metabolitexenvironment_disease_project/tables/ST8_suggestive_O3FA.tsv"))
+o6fa_df <- as.data.frame(fread("/Users/courtneyastore/Dropbox (GaTech)/metabolitexenvironment_disease_project/tables/ST9_suggestive_O6FA.tsv"))
+dha_df <- as.data.frame(fread("/Users/courtneyastore/Dropbox (GaTech)/metabolitexenvironment_disease_project/tables/ST10_suggestive_DHA.tsv"))
 
 # O3FA
 nongenetic_o3fa_df <- o3fa_df[c('metabolite','disease','disease_group','non_genetic_lo_ci','non_genetic_hi_ci','non_genetic_or','non_genetic_pval')]

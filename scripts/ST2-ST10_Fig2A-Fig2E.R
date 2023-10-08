@@ -114,7 +114,7 @@ significant_o3fa_df <- o3fa_df[(o3fa_df$significance != "") & (o3fa_df$risk_prot
 significant_o3fa_df$label <- "Omega-3 fatty acids"
 st1_df <- significant_o3fa_df[c("label","phenotype","category","n_case_samples","n_control_samples","estimate","se","z","lo_ci","hi_ci","or","pval")]
 colnames(st1_df) <- c("metabolite","disease","disease_group","n_case_samples","n_control_samples","estimate","se","z","lo_ci","hi_ci","or","pval")
-write.table(st1_df,file="/Users/courtneyastore/Dropbox (GaTech)/metabolitexenvironment_disease_project/tables/ST1_nongenetic_O3FA.tsv",quote=FALSE,sep="\t",row.names=FALSE,col.names=TRUE)
+write.table(st1_df,file="/Users/courtneyastore/Dropbox (GaTech)/metabolitexenvironment_disease_project/tables/V2_ST2_nongenetic_O3FA.tsv",quote=FALSE,sep="\t",row.names=FALSE,col.names=TRUE)
 
 
 # Make table of DHA significant association category frequencies

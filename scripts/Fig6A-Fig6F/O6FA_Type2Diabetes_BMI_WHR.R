@@ -15,7 +15,7 @@ options(ggrepel.max.overlaps = Inf)
 
 disease_status_df <- as.data.frame(fread("/Users/courtneyastore/Dropbox (GaTech)/metabolitexenvironment_disease_project/processing_files/V2ALLmerged_extractPhecodes.lst"))
 disease_status_df$ID <- paste0(disease_status_df$EID,"_",disease_status_df$EID,sep="")
-disease_status_df <- disease_status_df[c('ID','Status_401.1')]
+disease_status_df <- disease_status_df[c('ID','Status_250.2')]
 
 prs_df <- as.data.frame(fread("/Users/courtneyastore/Dropbox (GaTech)/metabolitexenvironment_disease_project/processing_files/ALLmergedPRS_UKBB.tsv"))
 prs_df <- prs_df[c('ID','PRS_met-d-omega6_PRS')]
@@ -37,8 +37,8 @@ environment_df <- environment_df[!(is.na(environment_df$WaistCircumference_media
 merge_df <- merge(covar_df,prs_df,by="ID")
 merge_df <- merge(merge_df,disease_status_df,by="ID")
 merge_df <- merge(merge_df,environment_df,by="ID")
-merge_df <- merge_df[merge_df$Status_401.1 != "Excluded", ]
-merge_df$disease_status <- ifelse(merge_df$Status_401.1 == "Case", 1, 0)
+merge_df <- merge_df[merge_df$Status_250.2 != "Excluded", ]
+merge_df$disease_status <- ifelse(merge_df$Status_250.2 == "Case", 1, 0)
 merge_df$bmi_group <- ifelse(merge_df$BMI_median > 30,1,0)
 
 female_df <- merge_df[merge_df$sex_corrected == 0, ]
@@ -98,14 +98,13 @@ final_df <- rbind(model1_prev_perc_df,model2_prev_perc_df,model3_prev_perc_df,mo
 
 model_colors <- c("BMI-Obese" = "#1f9990","BMI-Non-obese" = "#CCFFFF","WHR-Obese"="#9F2B68","WHR-Non-obese"="#F8C8DC")
 
-
 ggplot(final_df, aes(x=PRS_percentile, y=Prev*100,col = model,fill=model, group = model)) + geom_point(alpha=0.3) + 
   theme_bw() + theme(legend.position="bottom",text = element_text(family = "Helvetica",size=20),axis.text=element_text(size=20),axis.title=element_text(size=20), panel.border = element_rect(colour = "black", fill=NA, size=1)) + 
-  xlab("Percentile of PGS-Omega-6 fatty acids") + ylab("Prevalence of Essential hypertension (%)") +
+  xlab("Percentile of PGS-Omega-6 fatty acids") + ylab("Prevalence of Type 2 diabetes (%)") +
   geom_smooth(method = "lm", formula = y ~ poly(x, 3), size = 1) +
   scale_fill_manual(name="Group",values=model_colors)+ 
   scale_color_manual(name="Group",values=model_colors)
-ggsave("/Users/courtneyastore/Dropbox (GaTech)/metabolitexenvironment_disease_project/figures/Figure6/V2_O6FA_EssentialHypertension_BMI_WHR_PGSPrev_plt.pdf",height = 8,width = 8,dpi = 300,limitsize = FALSE)
+ggsave("/Users/courtneyastore/Dropbox (GaTech)/metabolitexenvironment_disease_project/figures/Figure6/V2_O6FA_Type2Diabetes_BMI_WHR_PGSPrev_plt.pdf",height = 8,width = 8,dpi = 300,limitsize = FALSE)
 
 
 

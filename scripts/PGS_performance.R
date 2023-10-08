@@ -7,7 +7,7 @@ library(plyr)
 library(stringr)
 
 
-disease_status_df <- as.data.frame(fread("/Users/courtneyastore/Dropbox (GaTech)/metabolitexenvironment_disease_project/processing_files/ALLmerged_extractPhecodes.lst"))
+disease_status_df <- as.data.frame(fread("/Users/courtneyastore/Dropbox (GaTech)/metabolitexenvironment_disease_project/processing_files/V4_ALLmerged_extractPhecodes.lst"))
 disease_status_df$ID <- paste0(disease_status_df$EID,"_",disease_status_df$EID,sep="")
 
 prs_df <- as.data.frame(fread("/Users/courtneyastore/Dropbox (GaTech)/metabolitexenvironment_disease_project/processing_files/V2ALLmergedPRS_UKBB.tsv"))
@@ -46,6 +46,8 @@ dha_df <- dha_df[c('ID','sex_corrected','age','age_square','PC1','PC2','PC3','PC
 colnames(dha_df) <- c('ID','sex_corrected','age','age_square','PC1','PC2','PC3','PC4','PC5','PC6','PC7','PC8','PC9','PC10','p23450_zscore','PRS')
 dha_lm <- lm(PRS ~ p23450_zscore + age + age_square + sex_corrected + PC1 + PC2 + PC3 + PC4 + PC5 + PC6 + PC7 + PC8 + PC9 + PC10, data = dha_df)
 dha_p = coef(summary(dha_lm))[2,4] # P = 0
+
+library(fmsb)
 
 # Major depressive disorder
 depression_df <- disease_pgs_covar_df

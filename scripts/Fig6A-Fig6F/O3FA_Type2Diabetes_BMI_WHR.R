@@ -30,13 +30,24 @@ environment_df <- as.data.frame(fread("/Users/courtneyastore/Dropbox (GaTech)/me
 environment_df$ID <- paste0(environment_df$eid,"_",environment_df$eid,sep="")
 environment_df <- environment_df[c('ID','BMI_median','WaistCircumference_median_to_HipCircumference_median_ratio')]
 
+#Remove entries with missing values.
+environment_df <- environment_df[!(is.na(environment_df$BMI_median)),]
+environment_df <- environment_df[!(is.na(environment_df$WaistCircumference_median_to_HipCircumference_median_ratio)),]
+
 merge_df <- merge(covar_df,prs_df,by="ID")
 merge_df <- merge(merge_df,disease_status_df,by="ID")
 merge_df <- merge(merge_df,environment_df,by="ID")
 merge_df <- merge_df[merge_df$Status_250.2 != "Excluded", ]
 merge_df$disease_status <- ifelse(merge_df$Status_250.2 == "Case", 1, 0)
 merge_df$bmi_group <- ifelse(merge_df$BMI_median > 30,1,0)
-merge_df$whr_group <- ifelse(merge_df$WaistCircumference_median_to_HipCircumference_median_ratio >= 0.85,1,0)
+
+female_df <- merge_df[merge_df$sex_corrected == 0, ]
+female_df$whr_group <- ifelse(female_df$WaistCircumference_median_to_HipCircumference_median_ratio > 0.85,1,0)
+
+male_df <- merge_df[merge_df$sex_corrected == 1, ]
+male_df$whr_group <- ifelse(male_df$WaistCircumference_median_to_HipCircumference_median_ratio > 0.95,1,0)
+
+merge_df <- rbind(male_df,female_df)
 
 # Obese BMI
 obese_bmi_df <- merge_df[merge_df$bmi_group == 1, ]
@@ -85,7 +96,7 @@ model4_prev_perc_df <- model4_prev_perc_df[c('PRS_percentile','Prev','model')]
 
 final_df <- rbind(model1_prev_perc_df,model2_prev_perc_df,model3_prev_perc_df,model4_prev_perc_df)
 
-model_colors <- c("BMI-Obese" = "#C41E3A","BMI-Non-obese" = "#FAA0A0","WHR-Obese"="#9F2B68","WHR-Non-obese"="#F8C8DC")
+model_colors <- c("BMI-Obese" = "#1f9990","BMI-Non-obese" = "#CCFFFF","WHR-Obese"="#9F2B68","WHR-Non-obese"="#F8C8DC")
 
 ggplot(final_df, aes(x=PRS_percentile, y=Prev*100,col = model,fill=model, group = model)) + geom_point(alpha=0.3) + 
   theme_bw() + theme(legend.position="bottom",text = element_text(family = "Helvetica",size=20),axis.text=element_text(size=20),axis.title=element_text(size=20), panel.border = element_rect(colour = "black", fill=NA, size=1)) + 
@@ -93,7 +104,7 @@ ggplot(final_df, aes(x=PRS_percentile, y=Prev*100,col = model,fill=model, group 
   geom_smooth(method = "lm", formula = y ~ poly(x, 3), size = 1) +
   scale_fill_manual(name="Group",values=model_colors)+ 
   scale_color_manual(name="Group",values=model_colors)
-ggsave("/Users/courtneyastore/Dropbox (GaTech)/metabolitexenvironment_disease_project/figures/Figure6/O3FA_Type2Diabetes_BMI_WHR_PGSPrev_plt.pdf",height = 8,width = 8,dpi = 300,limitsize = FALSE)
+ggsave("/Users/courtneyastore/Dropbox (GaTech)/metabolitexenvironment_disease_project/figures/Figure6/V2_O3FA_Type2Diabetes_BMI_WHR_PGSPrev_plt.pdf",height = 8,width = 8,dpi = 300,limitsize = FALSE)
 
 
 

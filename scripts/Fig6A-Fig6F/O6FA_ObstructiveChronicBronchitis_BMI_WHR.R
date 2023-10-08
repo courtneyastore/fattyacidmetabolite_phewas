@@ -18,7 +18,7 @@ disease_status_df$ID <- paste0(disease_status_df$EID,"_",disease_status_df$EID,s
 disease_status_df <- disease_status_df[c('ID','Status_496.21')]
 
 prs_df <- as.data.frame(fread("/Users/courtneyastore/Dropbox (GaTech)/metabolitexenvironment_disease_project/processing_files/ALLmergedPRS_UKBB.tsv"))
-prs_df <- prs_df[c('ID','PRS_met-d-dha_PRS')]
+prs_df <- prs_df[c('ID','PRS_met-d-omega6_PRS')]
 colnames(prs_df) <- c('ID','PRS')
 
 covar_df <- as.data.frame(fread("/Users/courtneyastore/Dropbox (GaTech)/metabolitexenvironment_disease_project/processing_files/12_12_2022_UKBBCovariate_table.tsv"))
@@ -93,18 +93,17 @@ model4_prev_perc_df$model <- "WHR-Non-obese"
 colnames(model4_prev_perc_df) <- c('PRS_percentile','Cases','Controls','Prev','model')
 model4_prev_perc_df <- model4_prev_perc_df[c('PRS_percentile','Prev','model')]
 
-
 final_df <- rbind(model1_prev_perc_df,model2_prev_perc_df,model3_prev_perc_df,model4_prev_perc_df)
 
 model_colors <- c("BMI-Obese" = "#1f9990","BMI-Non-obese" = "#CCFFFF","WHR-Obese"="#9F2B68","WHR-Non-obese"="#F8C8DC")
 
 ggplot(final_df, aes(x=PRS_percentile, y=Prev*100,col = model,fill=model, group = model)) + geom_point(alpha=0.3) + 
   theme_bw() + theme(legend.position="bottom",text = element_text(family = "Helvetica",size=20),axis.text=element_text(size=20),axis.title=element_text(size=20), panel.border = element_rect(colour = "black", fill=NA, size=1)) + 
-  xlab("Percentile of PGS-Docosahexaenoic acid") + ylab("Prevalence of Obstructive chronic bronchitis (%)") +
+  xlab("Percentile of PGS-Omega-6 fatty acids") + ylab("Prevalence of Obstructive chronic bronchitis (%)") +
   geom_smooth(method = "lm", formula = y ~ poly(x, 3), size = 1) +
   scale_fill_manual(name="Group",values=model_colors)+ 
   scale_color_manual(name="Group",values=model_colors)
-ggsave("/Users/courtneyastore/Dropbox (GaTech)/metabolitexenvironment_disease_project/figures/Figure6/V2_DHA_ObstructiveChronicBronchitis_BMI_WHR_PGSPrev_plt.pdf",height = 8,width = 8,dpi = 300,limitsize = FALSE)
+ggsave("/Users/courtneyastore/Dropbox (GaTech)/metabolitexenvironment_disease_project/figures/Figure6/V2_O6FA_ObstructiveChronicBronchitis_BMI_WHR_PGSPrev_plt.pdf",height = 8,width = 8,dpi = 300,limitsize = FALSE)
 
 
 
